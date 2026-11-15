@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Happy Birthday, Sarah ✨</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-cream: #fcf6f4;
+    --bg-blush: #f9e6ea;
+    --pink-primary: #d9385a;
+    --pink-btn: linear-gradient(135deg, #ea5273, #c8284b);
+    --gold-btn: linear-gradient(135deg, #f3b53f, #d99116);
+    --text-dark: #2c1e22;
+    --text-muted: #7a666c;
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    --script: 'Caveat', cursive;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 35%, #fff9f8 0%, #f7e4e8 100%);
+    font-family: var(--sans);
+    color: var(--text-dark);
+  }
+
+  /* Ambient sparkles & floating background */
+  .bg-sparkles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+  .sparkle {
+    position: absolute;
+    color: #e48fa2;
+    opacity: 0.45;
+    animation: floatSparkle 4s ease-in-out infinite;
+  }
+  @keyframes floatSparkle {
+    0%, 100% { transform: translateY(0) scale(1); opacity: 0.35; }
+    50% { transform: translateY(-10px) scale(1.2); opacity: 0.75; }
+  }
+
+  /* Screen Manager */
+  .screen {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 20px;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(14px) scale(0.98);
+    transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.65s;
+    z-index: 5;
+  }
+  .screen.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+    z-index: 10;
+  }
+
+  /* Typography */
+  .eyebrow {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: #c8526b;
+    margin-bottom: 6px;
+    letter-spacing: 0.2px;
+  }
+  .hero-title {
+    font-family: var(--serif);
+    font-size: 2.35rem;
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--text-dark);
+    margin-bottom: 10px;
+  }
+  .hero-title span {
+    color: var(--pink-primary);
+  }
+  .sub-copy {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    max-width: 310px;
+    line-height: 1.5;
+    margin: 0 auto 24px;
+  }
+
+  /* Pill Buttons */
+  .pill-btn {
+    background: var(--pink-btn);
+    color: #fff;
+    border: none;
+    padding: 14px 30px;
+    border-radius: 999px;
+    font-family: var(--sans);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 10px 24px rgba(200, 40, 75, 0.32), inset 0 1px 1px rgba(255,255,255,0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+    z-index: 20;
+  }
+  .pill-btn:active {
+    transform: scale(0.95);
+  }
+  .pill-btn.gold {
+    background: var(--gold-btn);
+    box-shadow: 0 10px 26px rgba(217, 145, 22, 0.38), inset 0 1px 1px rgba(255,255,255,0.45);
+  }
+
+  /* ================= SCREEN 1: ENVELOPE ================= */
+  .envelope-stage {
+    position: relative;
+    width: 300px;
+    height: 215px;
+    margin: 28px auto 34px;
+    cursor: pointer;
+  }
+  .env-back {
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+    width: 260px;
+    height: 165px;
+    background: #e6cbb3;
+    border-radius: 12px;
+    box-shadow: 0 18px 36px rgba(92, 58, 46, 0.16);
+    z-index: 1;
+  }
+  /* Letter card inside envelope */
+  .env-card {
+    position: absolute;
+    bottom: 14px;
+    left: 36px;
+    width: 228px;
+    height: 145px;
+    background: #fffdfb;
+    border-radius: 10px;
+    padding: 16px 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    border: 1px solid #f2e2dc;
+    z-index: 2;
+    transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .env-card-dots {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .env-card-dots i {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #f0b6c2;
+  }
+  .env-card-for {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 0.9rem;
+    color: #8c7379;
+  }
+  .env-card-name {
+    font-family: var(--serif);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--pink-primary);
+    margin-top: 2px;
+  }
+  .envelope-stage.opened .env-card {
+    transform: translateY(-76px);
+  }
+
+  /* Envelope Front Pocket & Flap */
+  .env-front {
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+    width: 260px;
+    height: 165px;
+    background: linear-gradient(180deg, #f6e7d8 0%, #ebd3be 100%);
+    border-radius: 12px;
+    z-index: 4;
+    overflow: hidden;
+    box-shadow: inset 0 -2px 6px rgba(160, 120, 95, 0.15);
+  }
+  .env-front::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(32deg, rgba(212,180,152,0.35) 49%, transparent 50%),
+      linear-gradient(-32deg, rgba(212,180,152,0.35) 49%, transparent 50%);
+  }
+  .env-flap {
+    position: absolute;
+    top: 50px;
+    left: 20px;
+    width: 0;
+    height: 0;
+    border-left: 130px solid transparent;
+    border-right: 130px solid transparent;
+    border-top: 96px solid #efe0d1;
+    filter: drop-shadow(0 4px 6px rgba(120, 85, 65, 0.12));
+    transform-origin: top;
+    transition: transform 0.65s ease;
+    z-index: 5;
+  }
+  .envelope-stage.opened .env-flap {
+    transform: rotateX(180deg);
+    z-index: 1;
+  }
+
+  /* Lavender Sprigs, Ribbon & Heart Seal */
+  .env-decor {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: opacity 0.4s ease, transform 0.5s ease;
+  }
+  .envelope-stage.opened .env-decor {
+    transform: translateX(-50%) translateY(10px) scale(0.95);
+  }
+  .heart-seal {
+    width: 44px;
+    height: 44px;
+    background: radial-gradient(circle at 35% 30%, #ff859d, #d9385a);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.25rem;
+    box-shadow: 0 6px 14px rgba(217, 56, 90, 0.35);
+    border: 2px solid #f9c6d0;
+  }
+
+  /* Cute Teddy & Bunny peeking when opened */
+  .peek-teddy {
+    position: absolute;
+    bottom: 8px;
+    left: -12px;
+    width: 82px;
+    height: 92px;
+    z-index: 6;
+    opacity: 0;
+    transform: translateX(20px) scale(0.7);
+    transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.25s;
+  }
+  .peek-bunny {
+    position: absolute;
+    bottom: 10px;
+    right: -8px;
+    width: 72px;
+    height: 85px;
+    z-index: 6;
+    opacity: 0;
+    transform: translateX(-20px) scale(0.7);
+    transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.35s;
+  }
+  .envelope-stage.opened .peek-teddy,
+  .envelope-stage.opened .peek-bunny {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+
+  /* ================= SCREEN 2: DARK ROOM ================= */
+  #screen-2 {
+    background: radial-gradient(circle at 50% 45%, #232136 0%, #11101d 100%);
+    color: #fff;
+    transition: background 0.9s ease, opacity 0.65s ease, visibility 0.65s;
+  }
+  #screen-2.lights-on {
+    background: radial-gradient(circle at 50% 35%, #fff5d6 0%, #fce8ec 100%);
+  }
+  .star-field {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .tiny-star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: #fff;
+    border-radius: 50%;
+    opacity: 0.5;
+    animation: twinkle 2.5s infinite alternate;
+  }
+  @keyframes twinkle {
+    from { opacity: 0.2; transform: scale(0.8); }
+    to { opacity: 0.85; transform: scale(1.3); }
+  }
+  .dark-teddy {
+    position: absolute;
+    bottom: 24px;
+    left: 20px;
+    width: 85px;
+    opacity: 0.32;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  #screen-2.lights-on .dark-teddy {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+
+  /* ================= SCREEN 3: PARTY ROOM ================= */
+  #screen-3 {
+    background:
+      repeating-linear-gradient(90deg, rgba(235, 215, 222, 0.35) 0px, rgba(235, 215, 222, 0.35) 18px, transparent 18px, transparent 36px),
+      linear-gradient(180deg, #fdf8f7 0%, #f8e6ea 100%);
+    justify-content: space-between;
+    padding-top: 0;
+    padding-bottom: 18px;
+  }
+  .bunting-bar {
+    width: 100%;
+    max-width: 440px;
+    height: 58px;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    padding: 0 8px;
+    border-top: 2px solid #d4b8c0;
+  }
+  .flag {
+    width: 0;
+    height: 0;
+    border-left: 14px solid transparent;
+    border-right: 14px solid transparent;
+    border-top: 26px solid #f39cb0;
+    transform-origin: top;
+    animation: swayFlag 2.6s ease-in-out infinite alternate;
+  }
+  .flag:nth-child(2n) { border-top-color: #f7c96b; animation-delay: 0.3s; }
+  .flag:nth-child(3n) { border-top-color: #9ecae8; animation-delay: 0.6s; }
+  .flag:nth-child(4n) { border-top-color: #c5a3e0; animation-delay: 0.9s; }
+  @keyframes swayFlag {
+    from { transform: rotate(-4deg); }
+    to { transform: rotate(4deg); }
+  }
+  .date-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #fff;
+    border: 1px solid #f0cfd7;
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #5c494f;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    margin: 6px 0 18px;
+  }
+  .party-bottom-scene {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    height: 175px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .yay-note {
+    position: absolute;
+    top: 0;
+    left: 18px;
+    font-family: var(--serif);
+    font-style: italic;
+    color: #c8647c;
+    font-size: 0.95rem;
+    transform: rotate(-6deg);
+  }
+  .balloon-cluster {
+    position: absolute;
+    left: 12px;
+    bottom: 18px;
+    width: 125px;
+    height: 145px;
+  }
+  .gift-boxes {
+    position: absolute;
+    right: 14px;
+    bottom: 16px;
+    width: 115px;
+    height: 100px;
+  }
+
+  /* ================= SCREEN 4: CAKE CUTTING ================= */
+  .cake-stage {
+    position: relative;
+    width: 270px;
+    height: 245px;
+    margin: 10px auto 20px;
+    touch-action: none;
+    cursor: pointer;
+  }
+  .cake-half {
+    position: absolute;
+    inset: 0;
+    transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .cake-left {
+    clip-path: inset(0 50% 0 0);
+  }
+  .cake-right {
+    clip-path: inset(0 0 0 50%);
+  }
+  .cake-stage.sliced .cake-left {
+    transform: translateX(-18px) rotate(-1.5deg);
+  }
+  .cake-stage.sliced .cake-right {
+    transform: translateX(18px) rotate(1.5deg);
+  }
+  /* Rainbow inside slice revealed when cut */
+  .rainbow-core {
+    position: absolute;
+    top: 72px;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    width: 34px;
+    height: 132px;
+    background: linear-gradient(180deg,
+      #ff758f 0%, #ff758f 16%,
+      #ffb347 16%, #ffb347 33%,
+      #ffe066 33%, #ffe066 50%,
+      #8ce99a 50%, #8ce99a 67%,
+      #74c0fc 67%, #74c0fc 84%,
+      #b197fc 84%, #b197fc 100%);
+    border-radius: 4px;
+    transition: transform 0.7s ease 0.1s;
+    z-index: 1;
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.1);
+  }
+  .cake-stage.sliced .rainbow-core {
+    transform: translateX(-50%) scaleX(1);
+  }
+  .swipe-guide {
+    position: absolute;
+    top: 56px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 162px;
+    width: 2px;
+    border-left: 2px dashed rgba(217, 56, 90, 0.55);
+    z-index: 8;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .swipe-dot {
+    position: absolute;
+    top: -6px;
+    left: -8px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #ea5273;
+    border: 2px solid #fff;
+    box-shadow: 0 0 10px rgba(234, 82, 115, 0.7);
+    animation: swipeDownHint 1.6s ease-in-out infinite;
+  }
+  @keyframes swipeDownHint {
+    0% { top: -6px; opacity: 1; }
+    80% { top: 145px; opacity: 0.8; }
+    100% { top: 155px; opacity: 0; }
+  }
+  .cake-stage.sliced .swipe-guide {
+    opacity: 0;
+  }
+
+  /* ================= SCREEN 5: MAKE A WISH ================= */
+  .wish-hero {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 18px;
+    position: relative;
+  }
+  .wish-glow {
+    position: absolute;
+    width: 220px;
+    height: 140px;
+    background: radial-gradient(circle, rgba(255, 214, 102, 0.45) 0%, transparent 70%);
+    z-index: 0;
+  }
+
+  /* ================= SCREEN 6: POLAROIDS ================= */
+  .polaroid-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    width: 100%;
+    max-width: 340px;
+    margin: 4px auto 22px;
+  }
+  .polaroid-card {
+    background: #fff;
+    padding: 9px 9px 14px;
+    border-radius: 6px;
+    box-shadow: 0 10px 22px rgba(65, 38, 46, 0.1);
+    transform: rotate(var(--rot, -2deg));
+    opacity: 0;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.6s ease;
+  }
+  #screen-6.active .polaroid-card {
+    opacity: 1;
+  }
+  .polaroid-card:nth-child(1) { --rot: -3deg; transition-delay: 0.1s; }
+  .polaroid-card:nth-child(2) { --rot: 2.5deg; transition-delay: 0.25s; }
+  .polaroid-card:nth-child(3) { --rot: 2deg; transition-delay: 0.4s; }
+  .polaroid-card:nth-child(4) { --rot: -2.5deg; transition-delay: 0.55s; }
+  .polaroid-card:active {
+    transform: scale(1.05) rotate(0deg);
+  }
+  .polaroid-art {
+    width: 100%;
+    aspect-ratio: 1 / 0.92;
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .polaroid-caption {
+    font-family: var(--script);
+    font-size: 1.15rem;
+    color: #4b3a3f;
+    margin-top: 7px;
+  }
+
+  /* ================= SCREEN 7: LOVE LETTER ================= */
+  .notebook-card {
+    background:
+      repeating-linear-gradient(180deg, transparent 0px, transparent 27px, #f1dfe3 28px),
+      #fffdfb;
+    width: 100%;
+    max-width: 375px;
+    max-height: 74vh;
+    overflow-y: auto;
+    padding: 24px 22px 26px;
+    border-radius: 14px;
+    box-shadow: 0 16px 38px rgba(72, 42, 50, 0.12);
+    border: 1px solid #f4e2e6;
+    text-align: left;
+    margin-bottom: 18px;
+    position: relative;
+  }
+  .letter-salutation {
+    font-family: var(--serif);
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 12px;
+  }
+  .letter-salutation span {
+    color: var(--pink-primary);
+  }
+  .letter-body p {
+    font-size: 0.9rem;
+    line-height: 28px;
+    color: #3f3034;
+    margin-bottom: 14px;
+  }
+  .drop-cap {
+    float: left;
+    font-family: var(--serif);
+    font-size: 2.5rem;
+    line-height: 0.85;
+    padding-right: 7px;
+    padding-top: 4px;
+    color: var(--pink-primary);
+    font-weight: 700;
+  }
+  .letter-sign {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--pink-primary);
+    text-align: right;
+    margin-top: 6px;
+  }
+
+  /* ================= SCREEN 8: FINALE ================= */
+  .finale-teddy {
+    width: 145px;
+    margin-bottom: 12px;
+    animation: gentleFloat 3s ease-in-out infinite;
+  }
+  @keyframes gentleFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  .replay-link {
+    margin-top: 22px;
+    background: transparent;
+    border: 1px solid #e6bfc8;
+    color: #9c727c;
+    padding: 9px 20px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    cursor: pointer;
+  }
+
+  /* Confetti Layer */
+  #confettiCanvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 99;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="confettiCanvas"></canvas>
+
+<!-- Ambient Sparkles -->
+<div class="bg-sparkles">
+  <span class="sparkle" style="top:12%; left:14%; font-size:14px;">✦</span>
+  <span class="sparkle" style="top:22%; right:16%; font-size:18px; animation-delay:0.8s;">✦</span>
+  <span class="sparkle" style="bottom:20%; left:12%; font-size:16px; animation-delay:1.5s;">✦</span>
+  <span class="sparkle" style="bottom:28%; right:14%; font-size:13px; animation-delay:2.1s;">✦</span>
+</div>
+
+<!-- ==================== SCREEN 1: ENVELOPE ==================== -->
+<section id="screen-1" class="screen active">
+  <p class="eyebrow">a little something ✦</p>
+  <h1 class="hero-title">There's<br>something <span>for you</span></h1>
+  <p class="sub-copy">A tiny birthday surprise, made just for you.</p>
+
+  <div class="envelope-stage" id="envelopeStage" onclick="handleEnvelopeTap()">
+    <div class="env-back"></div>
+
+    <!-- Card inside -->
+    <div class="env-card">
+      <div class="env-card-dots"><i></i><i></i><i></i><i></i><i></i></div>
+      <span class="env-card-for">for</span>
+      <span class="env-card-name">Sarah</span>
+    </div>
+
+    <div class="env-front"></div>
+    <div class="env-flap"></div>
+
+    <!-- Ribbon & Heart Seal -->
+    <div class="env-decor">
+      <div style="font-size:1.35rem; margin-bottom:-6px; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.1));">💐</div>
+      <div class="heart-seal">🤍</div>
+    </div>
+
+    <!-- Cute Teddy Bear SVG -->
+    <svg class="peek-teddy" viewBox="0 0 100 110">
+      <circle cx="28" cy="30" r="13" fill="#d48c46"/>
+      <circle cx="28" cy="30" r="7" fill="#f2be85"/>
+      <circle cx="72" cy="30" r="13" fill="#d48c46"/>
+      <circle cx="72" cy="30" r="7" fill="#f2be85"/>
+      <!-- Party Hat -->
+      <polygon points="50,4 37,24 63,24" fill="#ea5273"/>
+      <circle cx="50" cy="4" r="4" fill="#ffd166"/>
+      <!-- Head -->
+      <circle cx="50" cy="44" r="24" fill="#e09850"/>
+      <ellipse cx="50" cy="50" rx="11" ry="8" fill="#fae0c3"/>
+      <circle cx="42" cy="41" r="2.8" fill="#2c1e22"/>
+      <circle cx="58" cy="41" r="2.8" fill="#2c1e22"/>
+      <ellipse cx="50" cy="47" rx="3.5" ry="2.5" fill="#5c3624"/>
+      <path d="M46 52 Q50 56 54 52" stroke="#5c3624" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- Body -->
+      <ellipse cx="50" cy="84" rx="22" ry="20" fill="#e09850"/>
+      <ellipse cx="50" cy="84" rx="13" ry="12" fill="#fae0c3"/>
+      <circle cx="26" cy="76" r="8" fill="#d48c46"/>
+      <circle cx="74" cy="76" r="8" fill="#d48c46"/>
+    </svg>
+
+    <!-- Cute Bunny SVG -->
+    <svg class="peek-bunny" viewBox="0 0 90 105">
+      <ellipse cx="35" cy="22" rx="7" ry="19" transform="rotate(-10 35 22)" fill="#fff8f2" stroke="#ebd8cc" stroke-width="1.5"/>
+      <ellipse cx="35" cy="22" rx="3.5" ry="13" transform="rotate(-10 35 22)" fill="#f7b8c6"/>
+      <ellipse cx="57" cy="22" rx="7" ry="19" transform="rotate(12 57 22)" fill="#fff8f2" stroke="#ebd8cc" stroke-width="1.5"/>
+      <ellipse cx="57" cy="22" rx="3.5" ry="13" transform="rotate(12 57 22)" fill="#f7b8c6"/>
+      <circle cx="46" cy="50" r="21" fill="#fff8f2" stroke="#ebd8cc" stroke-width="1.5"/>
+      <circle cx="39" cy="47" r="2.5" fill="#2c1e22"/>
+      <circle cx="53" cy="47" r="2.5" fill="#2c1e22"/>
+      <circle cx="34" cy="53" r="3.5" fill="#f7b8c6" opacity="0.7"/>
+      <circle cx="58" cy="53" r="3.5" fill="#f7b8c6" opacity="0.7"/>
+      <circle cx="46" cy="52" r="2.5" fill="#ea5273"/>
+      <ellipse cx="46" cy="82" rx="18" ry="16" fill="#fff8f2" stroke="#ebd8cc" stroke-width="1.5"/>
+    </svg>
+  </div>
+
+  <button class="pill-btn" id="envBtn" onclick="handleEnvelopeButton()">
+    <span>🤍</span> <span id="envBtnText">Open your surprise ✨</span>
+  </button>
+</section>
+
+<!-- ============
